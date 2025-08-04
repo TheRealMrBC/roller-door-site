@@ -70,4 +70,5 @@ document.addEventListener("DOMContentLoaded", () => {
       displayDoors(filtered);
     });
   });
+
   
