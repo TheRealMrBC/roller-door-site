@@ -1,0 +1,91 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #f9f9f9;
+    color: #333;
+  }
+  
+  header {
+    background-color: #004466;
+    color: white;
+    padding: 1rem;
+    text-align: center;
+  }
+  
+  main {
+    padding: 2rem;
+  }
+  
+  .door-spec {
+    background-color: white;
+    border: 1px solid #ccc;
+    margin: 1rem auto;
+    border-radius: 8px;
+    max-width: 600px;
+    overflow: hidden;
+  }
+  
+  .door-toggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    background-color: #004466;
+    color: white;
+    font-size: 1.2rem;
+    padding: 1rem;
+    text-align: left;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .arrow {
+    transition: transform 0.3s ease;
+  }
+  
+  .door-toggle.open .arrow {
+    transform: rotate(90deg);  
+  }
+  
+  .door-toggle:hover {
+    background-color: #006699;
+  }
+  
+  .specs {
+    display: none;
+    padding: 1rem;
+    border-top: 1px solid #ccc;
+  }
+  
+  .specs ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;  
+  }
+  
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  li {
+    padding: 0.5rem 0;
+  }
+  
+  footer {
+    text-align: center;
+    margin-top: 2rem;
+    padding: 1rem;
+    background-color: #eee;
+  }
+  .search-section {
+    text-align: center;
+    margin: 1rem;
+  }
+  
+  #searchInput {
+    padding: 0.5rem;
+    width: 60%;
+    font-size: 1rem;
+  }
+  
