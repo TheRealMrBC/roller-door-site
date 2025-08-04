@@ -73,11 +73,13 @@ body {
   }
   
   footer {
+    background-color: var(--header-bg);
+    color: var(--header-text);
     text-align: center;
-    margin-top: 2rem;
     padding: 1rem;
-    background-color: #eee;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
+  
   .search-section {
     text-align: center;
     margin: 1rem;
