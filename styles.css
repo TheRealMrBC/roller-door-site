@@ -52,10 +52,18 @@ body {
   }
   
   .specs {
-    display: none;
-    padding: 1rem;
-    border-top: 1px solid #ccc;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, opacity 0.4s ease;
   }
+  
+  .door-toggle.open + .specs {
+    max-height: 1000px;
+    opacity: 1;
+    padding: 1rem;
+  }
+  
   
   .specs ul {
     list-style-type: none;

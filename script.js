@@ -33,7 +33,13 @@ document.addEventListener("DOMContentLoaded", () => {
       download: true,
       header: true,
       complete: function (results) {
-        doorsData = results.data;
+        doorsData = results.data.map(door => {
+            const normalized = {};
+            for (const key in door) {
+              normalized[key.trim().toLowerCase()] = door[key]?.trim();
+            }
+            return normalized;
+          });          
         console.log("Parsed data:", results.data);
         displayDoors(doorsData);
       },
@@ -77,8 +83,9 @@ document.addEventListener("DOMContentLoaded", () => {
             const li = document.createElement("li");
           
             if (value.startsWith("http")) {
-              li.innerHTML = `${label}: <a href="${value}" target="_blank">${value.includes("Download") ? "Download" : value}</a>`;
-            } else {
+                const displayText = key.includes("datasheet") ? "Download" : value;
+                li.innerHTML = `${label}: <a href="${value}" target="_blank">${displayText}</a>`;
+              } else {
               li.textContent = `${label}: ${value}`;
             }
           
@@ -91,8 +98,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
         toggleBtn.addEventListener("click", () => {
           const isOpen = specsDiv.style.display === "block";
-          specsDiv.style.display = isOpen ? "none" : "block";
-          toggleBtn.classList.toggle("open", !isOpen);
+          toggleBtn.classList.toggle("open");
         });
   
         wrapper.appendChild(toggleBtn);
