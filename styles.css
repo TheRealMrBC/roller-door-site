@@ -55,16 +55,15 @@ body {
     max-height: 0;
     opacity: 0;
     overflow: hidden;
-    transition: max-height 0.4s ease, opacity 0.4s ease;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
   }
   
-  .door-toggle.open + .specs {
+  .specs.open {
     max-height: 1000px;
     opacity: 1;
     padding: 1rem;
-  }
-  
-  
+  }  
+    
   .specs ul {
     list-style-type: none;
     padding: 0;
@@ -134,6 +133,10 @@ body {
     --header-bg: #004466;
     --header-text: #fff;
     --toggle-bg: transparent;
+    --primary: #004466;
+    --primary-dark: #003344;
+    --text-light: #fff;
+
   }
   
   /* Dark mode */
@@ -181,5 +184,20 @@ body {
     max-width: 600px;
     overflow: hidden;
     transition: background-color 0.3s ease;
+  }
+  
+  #clearSearch {
+    margin-left: 1rem;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    background: var(--primary);
+    color: var(--text-light);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  #clearSearch:hover {
+    background: var(--primary-dark);
   }
   

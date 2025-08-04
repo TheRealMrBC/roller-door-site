@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
             return normalized;
           });          
-        console.log("Parsed data:", results.data);
+          console.log("Normalized data:", doorsData);
         displayDoors(doorsData);
       },
       error: function (err) {
@@ -59,15 +59,20 @@ document.addEventListener("DOMContentLoaded", () => {
         wrapper.className = "door-spec";
   
         const toggleBtn = document.createElement("button");
+        const uniqueId = `specs-${Math.random().toString(36).substr(2, 9)}`; // unique ID
+
         toggleBtn.className = "door-toggle";
+        toggleBtn.setAttribute("aria-expanded", "false");
+        toggleBtn.setAttribute("aria-controls", uniqueId);
         toggleBtn.innerHTML = `
-          <span class="label">Model: ${door.model}</span>
-          <span class="arrow">▶</span>
+        <span class="label">Model: ${door.model}</span>
+        <span class="arrow">▶</span>
         `;
+
   
         const specsDiv = document.createElement("div");
         specsDiv.className = "specs";
-        specsDiv.style.display = "none";
+        specsDiv.id = uniqueId;
     
         const specsList = document.createElement("ul");
 
@@ -97,9 +102,11 @@ document.addEventListener("DOMContentLoaded", () => {
         specsDiv.appendChild(specsList);
   
         toggleBtn.addEventListener("click", () => {
-          const isOpen = specsDiv.style.display === "block";
-          toggleBtn.classList.toggle("open");
-        });
+            const isOpen = specsDiv.classList.toggle("open");
+            toggleBtn.classList.toggle("open");
+            toggleBtn.setAttribute("aria-expanded", isOpen);
+          });
+          
   
         wrapper.appendChild(toggleBtn);
         wrapper.appendChild(specsDiv);
@@ -124,7 +131,14 @@ searchInput.addEventListener("input", () => {
   }
 
   displayDoors(filtered);
-});          
+});  
+const clearBtn = document.getElementById("clearSearch");
+clearBtn.addEventListener("click", () => {
+  searchInput.value = "";
+  noResults.classList.remove("visible");
+  displayDoors(doorsData);
+});
+
 });
 
   
