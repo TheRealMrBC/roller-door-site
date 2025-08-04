@@ -65,8 +65,9 @@ document.addEventListener("DOMContentLoaded", () => {
     searchInput.addEventListener("input", () => {
       const filter = searchInput.value.toLowerCase();
       const filtered = doorsData.filter(door =>
-          door.model && door.model.toLowerCase().includes(filter)
-    );
+        door.model && door.model.toLowerCase().includes(filter)
+      );
+      
       displayDoors(filtered);
     });
   });
