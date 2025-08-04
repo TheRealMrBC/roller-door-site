@@ -25,7 +25,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTI34lxrAWXmVwfwTukxCbWtKRNcAK1WV3r7SieyULannTwpsRF2WXBS35VJj0kH-3tLPXzTkye2kyI/pub?output=csv";
     const doorList = document.getElementById("doorList");
     const searchInput = document.getElementById("searchInput");
-    
+    const noResults = document.getElementById("noResults");
+
     let doorsData = [];
   
     Papa.parse(sheetUrl, {
@@ -85,7 +86,6 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
   
-    const noResults = document.getElementById("noResults");
 
 searchInput.addEventListener("input", () => {
   const filter = searchInput.value.trim().toLowerCase();
