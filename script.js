@@ -34,6 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
       header: true,
       complete: function (results) {
         doorsData = results.data;
+        console.log("Parsed data:", results.data);
         displayDoors(doorsData);
       },
       error: function (err) {
