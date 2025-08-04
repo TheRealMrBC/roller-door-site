@@ -61,9 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const specsDiv = document.createElement("div");
         specsDiv.className = "specs";
         specsDiv.style.display = "none";
-  
-        const colorList = door.colors.split(";").join(", ");
-  
+    
         const specsList = document.createElement("ul");
         specsList.innerHTML = `
           <li>Maximum-dimensions: ${door.Maximum-dimensions}</li>
