@@ -1,8 +1,24 @@
 document.addEventListener("DOMContentLoaded", () => {
+    const body = document.body;
+const themeToggle = document.getElementById("themeToggle");
+
+// Load saved preference
+if (localStorage.getItem("theme") === "dark") {
+  body.classList.add("dark");
+  themeToggle.textContent = "☀️";
+}
+
+// Toggle on click
+themeToggle.addEventListener("click", () => {
+  const isDark = body.classList.toggle("dark");
+  themeToggle.textContent = isDark ? "☀️" : "🌙";
+  localStorage.setItem("theme", isDark ? "dark" : "light");
+});
+
     const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTI34lxrAWXmVwfwTukxCbWtKRNcAK1WV3r7SieyULannTwpsRF2WXBS35VJj0kH-3tLPXzTkye2kyI/pub?output=csv";
     const doorList = document.getElementById("doorList");
     const searchInput = document.getElementById("searchInput");
-  
+    
     let doorsData = [];
   
     Papa.parse(sheetUrl, {

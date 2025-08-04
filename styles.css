@@ -109,4 +109,61 @@ body {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
   }
+
+  /* 🌞 Light mode (default) */
+:root {
+    --bg-color: #f9f9f9;
+    --text-color: #333;
+    --card-bg: #fff;
+    --header-bg: #004466;
+    --header-text: #fff;
+    --toggle-bg: transparent;
+  }
+  
+  /* 🌙 Dark mode overrides */
+  body.dark {
+    --bg-color: #121212;
+    --text-color: #eee;
+    --card-bg: #1e1e1e;
+    --header-bg: #1a1a1a;
+    --header-text: #fff;
+    --toggle-bg: #2a2a2a;
+  }
+  
+  body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  header {
+    background-color: var(--header-bg);
+    color: var(--header-text);
+    padding: 1rem;
+    text-align: center;
+    position: relative;
+  }
+  
+  #themeToggle {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    background: var(--toggle-bg);
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: var(--header-text);
+    transition: color 0.3s ease;
+  }
+  
+  .door-spec {
+    background-color: var(--card-bg);
+    border: 1px solid #ccc;
+    margin: 1rem auto;
+    padding: 0;
+    border-radius: 8px;
+    max-width: 600px;
+    overflow: hidden;
+    transition: background-color 0.3s ease;
+  }
   
