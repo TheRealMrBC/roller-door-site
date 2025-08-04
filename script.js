@@ -64,23 +64,23 @@ document.addEventListener("DOMContentLoaded", () => {
   
     const noResults = document.getElementById("noResults");
 
-    searchInput.addEventListener("input", () => {
-      const filter = searchInput.value.trim().toLowerCase();
-    
-      const filtered = doorsData.filter(door =>
-        door.model && door.model.toLowerCase().includes(filter)
-      );
-    
-      // Show or hide "No results"
-      if (filtered.length === 0) {
-        noResults.style.display = "block";
-        noResults.textContent = `🔍 No results found for "${searchInput.value}"`;
-      } else {
-        noResults.style.display = "none";
-      }
-    
-      displayDoors(filtered);
-    });          
+searchInput.addEventListener("input", () => {
+  const filter = searchInput.value.trim().toLowerCase();
+
+  const filtered = doorsData.filter(door =>
+    door.model && door.model.toLowerCase().includes(filter)
+  );
+
+  // Show or hide "No results"
+  if (filtered.length === 0) {
+    noResults.textContent = `🔍 No results found for "${searchInput.value}"`;
+    noResults.classList.add("visible");
+  } else {
+    noResults.classList.remove("visible");
+  }
+
+  displayDoors(filtered);
+});          
   });
 
   
