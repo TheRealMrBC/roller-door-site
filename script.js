@@ -63,18 +63,29 @@ document.addEventListener("DOMContentLoaded", () => {
         specsDiv.style.display = "none";
     
         const specsList = document.createElement("ul");
-        specsList.innerHTML = `
-          <li>Maximum-dimensions: ${door.Maximum-dimensions}</li>
-          <li>Minimum-dimensions: ${door.Minimum-dimensions}</li>
-          <li>Opening-speed: ${door.Opening-speed}</li>
-          <li>Closing-speed: ${door.Closing-speed}</li>
-          <li>Usage: ${door.Usage}</li>
-          <li>Technology: ${door.Technology}</li>
-          <li>Drum: ${door.Drum}</li>
-          <li>Web-Site: ${door.Web-Site}</li>
-          <li>Technical-datasheet: ${door.Technical-datasheet}</li>
-          <li>Product-Datasheet: ${door.Product-Datasheet}</li>
-        `;
+
+        Object.keys(door).forEach(key => {
+            if (key.toLowerCase() === "model") return;
+          
+            const label = key
+              .replace(/-/g, " ")
+              .replace(/\b\w/g, char => char.toUpperCase());
+          
+            const value = door[key]?.trim() || "N/A";
+          
+            const li = document.createElement("li");
+          
+            if (value.startsWith("http")) {
+              li.innerHTML = `${label}: <a href="${value}" target="_blank">${value.includes("Download") ? "Download" : value}</a>`;
+            } else {
+              li.textContent = `${label}: ${value}`;
+            }
+          
+            specsList.appendChild(li);
+          });
+          
+
+
         specsDiv.appendChild(specsList);
   
         toggleBtn.addEventListener("click", () => {
