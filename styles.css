@@ -110,7 +110,7 @@ body {
     to { opacity: 1; transform: translateY(0); }
   }
 
-  /* 🌞 Light mode (default) */
+ /* Base light mode */
 :root {
     --bg-color: #f9f9f9;
     --text-color: #333;
@@ -120,7 +120,7 @@ body {
     --toggle-bg: transparent;
   }
   
-  /* 🌙 Dark mode overrides */
+  /* Dark mode */
   body.dark {
     --bg-color: #121212;
     --text-color: #eee;
@@ -153,8 +153,8 @@ body {
     font-size: 1.2rem;
     cursor: pointer;
     color: var(--header-text);
-    transition: color 0.3s ease;
   }
+  
   
   .door-spec {
     background-color: var(--card-bg);
