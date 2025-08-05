@@ -20,10 +20,12 @@
 <meta name="twitter:title" content="Roller Door Specs">
 <meta name="twitter:description" content="Compare roller doors and control units. Datasheets and dimensions.">
 <meta name="twitter:image" content="https://www.rollerdoordb.co.uk/images/preview.png">
-  <title>Door Controllers</title>
+<title>Controllers | Roller Door Specs</title>
+
 
   <!-- Reuse the same stylesheet as the roller doors page -->
   <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="favicon.ico" type="images/favicon">
 </head>
 <body>
   <!-- Toggle between dark and light themes -->
@@ -46,6 +48,8 @@
 
   <!-- Container for dynamically loaded controller specifications -->
   <div id="doorList"></div>
+  <div id="loadingMessage">Loading data...</div>
+
 
   <!-- Load PapaParse CSV parser and controller data script -->
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>

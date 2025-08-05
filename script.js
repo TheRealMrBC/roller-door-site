@@ -41,10 +41,12 @@ document.addEventListener("DOMContentLoaded", () => {
     let doorsData = []; // Will hold parsed data
   
     // Use PapaParse to load CSV data from Google Sheets
+    const loading = document.getElementById("loadingMessage");
     Papa.parse(sheetUrl, {
       download: true,
       header: true,
       complete: function (results) {
+        loading.style.display = "none";
         doorsData = results.data.map(door => {
           const normalized = {};
           for (const key in door) {
@@ -55,6 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
         displayDoors(doorsData);
       },
       error: function (err) {
+        loading.textContent = "Failed to load data.";
         console.error("Error loading sheet:", err);
         doorList.innerHTML = "<p>Error loading door data.</p>";
       }

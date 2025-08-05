@@ -21,20 +21,24 @@
 <meta name="twitter:description" content="Compare roller doors and control units. Datasheets and dimensions.">
 <meta name="twitter:image" content="https://www.rollerdoordb.co.uk/images/preview.png">
 
-  <title>Roller Doors</title>
+<title>Roller Doors | Roller Door Specs</title>
+
 
   <!-- Stylesheet for layout, theme, and components -->
   <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="favicon.ico" type="images/favicon">
+
 </head>
 <body>
   <!-- Theme toggle button (light/dark mode) -->
-  <button id="themeToggle" aria-label="Toggle Dark Mode">🌙</button>
+  <button id="themeToggle" aria-label="Toggle dark/light mode">🌙</button>
 
   <!-- Navigation between pages -->
   <nav>
-    <a href="index.html">Roller Doors</a> |
+    <a href="index.html" class="active">Roller Doors</a> |
     <a href="controllers.html">Controllers</a>
   </nav>
+  
 
   <!-- Search bar and clear button container -->
   <div class="search-container">
@@ -47,6 +51,8 @@
 
   <!-- Container where door specs will be rendered dynamically -->
   <div id="doorList"></div>
+  <div id="loadingMessage">Loading data...</div>
+
 
   <!-- Script to fetch and render data from Google Sheets -->
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
