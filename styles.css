@@ -136,6 +136,8 @@ body {
     --primary: #004466;
     --primary-dark: #003344;
     --text-light: #fff;
+    --link-color: #004466;
+    --link-hover: #006699;
 
   }
   
@@ -147,6 +149,8 @@ body {
     --header-bg: #1a1a1a;
     --header-text: #fff;
     --toggle-bg: #2a2a2a;
+    --link-color: #66ccff;
+    --link-hover: #99e6ff;
   }
   
   body {
@@ -207,13 +211,14 @@ body {
   }
   
   nav a {
-    margin: 0 1rem;
+    color: var(--link-color);
     text-decoration: none;
-    color: var(--text);
     font-weight: bold;
   }
   
   nav a:hover {
     text-decoration: underline;
+    color: var(--link-hover);
   }
+  
   
