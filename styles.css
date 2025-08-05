@@ -1,224 +1,183 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    background-color: #f9f9f9;
-    color: #333;
-  }
-  
-  header {
-    background-color: #004466;
-    color: white;
-    padding: 1rem;
-    text-align: center;
-  }
-  
-  main {
-    padding: 2rem;
-  }
-  
-  .door-spec {
-    background-color: white;
-    border: 1px solid #ccc;
-    margin: 1rem auto;
-    border-radius: 8px;
-    max-width: 600px;
-    overflow: hidden;
-  }
-  
-  .door-toggle {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    background-color: #004466;
-    color: white;
-    font-size: 1.2rem;
-    padding: 1rem;
-    text-align: left;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .arrow {
-    transition: transform 0.3s ease;
-  }
-  
-  .door-toggle.open .arrow {
-    transform: rotate(90deg);  
-  }
-  
-  .door-toggle:hover {
-    background-color: #006699;
-  }
-  
-  .specs {
-    max-height: 0;
-    opacity: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease, opacity 0.3s ease;
-  }
-  
-  .specs.open {
-    max-height: 1000px;
-    opacity: 1;
-    padding: 1rem;
-  }  
-    
-  .specs ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;  
-  }
-  
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  li {
-    padding: 0.5rem 0;
-  }
-  
-  footer {
-    background-color: var(--header-bg);
-    color: var(--header-text);
-    text-align: center;
-    padding: 1rem;
-    transition: background-color 0.3s ease, color 0.3s ease;
-  }
-  
-  .search-section {
-    text-align: center;
-    margin: 1rem;
-  }
-  
-  #searchInput {
-    padding: 0.5rem;
-    width: 60%;
-    font-size: 1rem;
-  }
-  
-  .no-results {
-    display: none;
-    opacity: 0;
-    text-align: center;
-    margin-top: 1rem;
-    color: var(--text-color);
-    font-style: italic;
-    transition: opacity 0.3s ease;
-  }
-  
-  .no-results.visible {
-    display: block;
-    animation: fadeIn 0.4s ease forwards;
-  }
-  
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(6px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
+/* styles.css */
 
- /* Base light mode */
-:root {
-    --bg-color: #f9f9f9;
-    --text-color: #333;
-    --card-bg: #fff;
-    --header-bg: #004466;
-    --header-text: #fff;
-    --toggle-bg: transparent;
-    --primary: #004466;
-    --primary-dark: #003344;
-    --text-light: #fff;
-    --link-color: #004466;
-    --link-hover: #006699;
-
+/*------------------*
+  THEME: LIGHT MODE
+ *------------------*/
+ :root {
+    --background: #ffffff;
+    --text: #1a1a1a;
+    --card-bg: #f3f3f3;
+    --primary: #006699;
+    --primary-dark: #004466;
+    --text-light: #e0e0e0;
+    --link-color: #006699;
+    --link-hover: #004466;
   }
   
-  /* Dark mode */
-  body.dark {
-    --bg-color: #121212;
-    --text-color: #eee;
+  /*------------------*
+    THEME: DARK MODE
+   *------------------*/
+  .dark {
+    --background: #121212;
+    --text: #f3f3f3;
     --card-bg: #1e1e1e;
-    --header-bg: #1a1a1a;
-    --header-text: #fff;
-    --toggle-bg: #2a2a2a;
+    --primary: #66ccff;
+    --primary-dark: #3399cc;
+    --text-light: #999999;
     --link-color: #66ccff;
     --link-hover: #99e6ff;
   }
   
+  /*------------------*
+    GLOBAL STYLES
+   *------------------*/
   body {
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    transition: background-color 0.3s ease, color 0.3s ease;
-  }
-  
-  header {
-    background-color: var(--header-bg);
-    color: var(--header-text);
+    font-family: Arial, sans-serif;
+    background-color: var(--background);
+    color: var(--text);
+    margin: 0;
     padding: 1rem;
-    text-align: center;
-    position: relative;
-  }
-  
-  #themeToggle {
-    position: absolute;
-    right: 1rem;
-    top: 1rem;
-    background: var(--toggle-bg);
-    border: none;
-    font-size: 1.2rem;
-    cursor: pointer;
-    color: var(--header-text);
-  }
-  
-  
-  .door-spec {
-    background-color: var(--card-bg);
-    border: 1px solid #ccc;
-    margin: 1rem auto;
-    padding: 0;
-    border-radius: 8px;
-    max-width: 600px;
-    overflow: hidden;
-    transition: background-color 0.3s ease;
-  }
-  
-  #clearSearch {
-    margin-left: 1rem;
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    background: var(--primary);
-    color: var(--text-light);
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  #clearSearch:hover {
-    background: var(--primary-dark);
+    transition: background-color 0.3s, color 0.3s;
   }
   
   nav {
-    margin-bottom: 2rem;
     text-align: center;
+    margin-bottom: 2rem;
   }
   
   nav a {
     color: var(--link-color);
+    margin: 0 1rem;
     text-decoration: none;
     font-weight: bold;
   }
   
   nav a:hover {
-    text-decoration: underline;
     color: var(--link-hover);
+    text-decoration: underline;
   }
   
+  /*------------------*
+    SEARCH BAR
+   *------------------*/
+  .search-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  #searchInput {
+    padding: 0.5rem;
+    font-size: 1rem;
+    width: 250px;
+    max-width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
+  
+  #clearSearch {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  #clearSearch:hover {
+    background-color: var(--primary-dark);
+  }
+  
+  #noResults {
+    text-align: center;
+    font-style: italic;
+    margin-top: 1rem;
+    display: none;
+    color: var(--text-light);
+  }
+  
+  #noResults.visible {
+    display: block;
+  }
+  
+  /*------------------*
+    DARK MODE TOGGLE
+   *------------------*/
+  #themeToggle {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text);
+    transition: color 0.3s;
+  }
+  
+  /*------------------*
+    DOOR CARD STYLES
+   *------------------*/
+  .door-spec {
+    background-color: var(--card-bg);
+    padding: 1rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 1.5rem;
+    transition: background-color 0.3s;
+  }
+  
+  .door-toggle {
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--primary);
+    padding: 0;
+  }
+  
+  .door-toggle .arrow {
+    transition: transform 0.3s ease;
+  }
+  
+  .door-toggle.open .arrow {
+    transform: rotate(90deg);
+  }
+  
+  .specs {
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: all 0.3s ease;
+  }
+  
+  .specs.open {
+    max-height: 1000px;
+    opacity: 1;
+    margin-top: 1rem;
+  }
+  
+  /* Split spec list into 2 columns for better readability */
+  .specs ul {
+    column-count: 2;
+    column-gap: 2rem;
+    padding-left: 1rem;
+  }
+  
+  @media (max-width: 600px) {
+    .specs ul {
+      column-count: 1;
+    }
+  }
   
