@@ -16,3 +16,17 @@ A responsive, searchable, and dark-mode-compatible website for displaying detail
 ## 🖼️ Demo
 
 > [Live Demo on GitHub Pages](https://www.rollerdoordb.co.uk)
+
+---
+
+## 📁 File Structure
+
+```plaintext
+/
+├── index.html               # Main page for roller doors
+├── controllers.html         # Second page for door controllers
+├── script.js                # Logic for loading & displaying roller door data
+├── controllers.js           # Logic for controller data
+├── styles.css               # Theme, layout, animations
+├── favicon.ico              # Tab icon
+├── README.md                # This file
