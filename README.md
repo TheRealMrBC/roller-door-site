@@ -15,7 +15,7 @@ A responsive, searchable, and dark-mode-compatible website for displaying detail
 
 ## 🖼️ Demo
 
-> [Live Demo on GitHub Pages](https://www.rollerdoordb.co.uk)
+> [Live Demo on GitHub Pages](https://www.rollerdoordb.co.uk/)  
 
 ---
 
@@ -30,3 +30,25 @@ A responsive, searchable, and dark-mode-compatible website for displaying detail
 ├── styles.css               # Theme, layout, animations
 ├── favicon.ico              # Tab icon
 ├── README.md                # This file
+```
+
+---
+
+## 🔌 Data Source
+
+- Data is pulled from **Google Sheets** in CSV format using [PapaParse](https://www.papaparse.com/).
+- To update door or controller info, simply modify the Google Sheet linked in your scripts.
+
+---
+
+## 🎨 Theme Customization
+
+- All colors are defined using CSS variables in `styles.css`
+- To change themes or branding, just update the variables near the top of the file
+
+---
+
+## 🙌 Acknowledgements
+
+- [PapaParse](https://www.papaparse.com/) for CSV parsing
+- Google Sheets for easy content management
