@@ -6,8 +6,10 @@
  * dynamically creates collapsible UI elements for each roller door model.
  */
 
+// Wait for the DOM to be fully loaded before running scripts
 document.addEventListener("DOMContentLoaded", () => {
     const body = document.body;
+// Handle theme toggle button for dark/light mode
     const themeToggle = document.getElementById("themeToggle");
   
     // Ensure theme toggle button exists
@@ -19,12 +21,15 @@ document.addEventListener("DOMContentLoaded", () => {
     // Load saved theme preference from localStorage
     if (localStorage.getItem("theme") === "dark") {
       body.classList.add("dark");
+// Handle theme toggle button for dark/light mode
       themeToggle.textContent = "☀️"; // Sun icon for switching to light mode
     }
   
     // Toggle light/dark theme on click
+// Handle theme toggle button for dark/light mode
     themeToggle.addEventListener("click", () => {
       const isDark = body.classList.toggle("dark");
+// Handle theme toggle button for dark/light mode
       themeToggle.textContent = isDark ? "☀️" : "🌙";
       localStorage.setItem("theme", isDark ? "dark" : "light");
     });
@@ -42,6 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
     // Use PapaParse to load CSV data from Google Sheets
     const loading = document.getElementById("loadingMessage");
+// Parse data from external CSV (Google Sheets) using PapaParse
     Papa.parse(sheetUrl, {
       download: true,
       header: true,
@@ -67,6 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
      * Renders each door's data into the DOM as collapsible sections.
      * @param {Array<Object>} doors - List of door data entries
      */
+// Render the product data as expandable/collapsible cards
     function displayDoors(doors) {
       doorList.innerHTML = "";
   
@@ -127,9 +134,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   
     // Handle live filtering of doors as user types
+// Filter the displayed products in real-time as user types
     searchInput.addEventListener("input", () => {
       const filter = searchInput.value.trim().toLowerCase();
       const filtered = doorsData.filter(door =>
+// Only search by the model name field
         door.model && door.model.toLowerCase().includes(filter)
       );
   

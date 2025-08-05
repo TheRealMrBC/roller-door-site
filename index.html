@@ -1,5 +1,7 @@
+<!-- Main HTML structure for index.html -->
 <!DOCTYPE html>
 <html lang="en">
+<!-- Page metadata and resource linking -->
 <head>
   <meta charset="UTF-8" />
   <!-- Essential Meta Tags -->
@@ -26,35 +28,46 @@
 
   <!-- Stylesheet for layout, theme, and components -->
   <link rel="stylesheet" href="styles.css" />
-  <link rel="icon" href="favicon.ico" type="images/favicon">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
 
 </head>
+<!-- Visible content starts here -->
 <body>
+  <header>
+    <h1>Roller Door Specifications</h1>
   <!-- Theme toggle button (light/dark mode) -->
+<!-- Dark mode toggle button -->
   <button id="themeToggle" aria-label="Toggle dark/light mode">🌙</button>
 
   <!-- Navigation between pages -->
-  <nav>
-    <a href="index.html" class="active">Roller Doors</a> |
-    <a href="controllers.html">Controllers</a>
-  </nav>
+<!-- Navigation between product categories -->
+    <nav>
+      <a href="index.html" class="active">Roller Doors</a> |
+      <a href="controllers.html">Controllers</a>
+    </nav>
+  </header>
   
 
   <!-- Search bar and clear button container -->
   <div class="search-container">
+<!-- Input field for filtering by model -->
     <input type="text" id="searchInput" placeholder="Search by model..." />
+<!-- Button to reset search field -->
     <button id="clearSearch">Clear</button>
   </div>
 
   <!-- Message shown when no search results match -->
+<!-- Display when no search matches found -->
   <div id="noResults"></div>
 
   <!-- Container where door specs will be rendered dynamically -->
+<!-- Dynamic list of product specs will be inserted here -->
   <div id="doorList"></div>
   <div id="loadingMessage">Loading data...</div>
 
 
   <!-- Script to fetch and render data from Google Sheets -->
+<!-- Load external CSV parser -->
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <script src="script.js"></script>
 </body>

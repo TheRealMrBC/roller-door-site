@@ -17,6 +17,7 @@
   /*------------------*
     THEME: DARK MODE
    *------------------*/
+/* Dark mode overrides for body and text */
   .dark {
     --background: #121212;
     --text: #f3f3f3;
@@ -31,6 +32,7 @@
   /*------------------*
     GLOBAL STYLES
    *------------------*/
+/* Base styles for body including font, background, and transition */
   body {
     font-family: Arial, sans-serif;
     background-color: var(--background);
@@ -99,6 +101,7 @@
     background-color: var(--primary-dark);
   }
   
+/* Message styling for when no results match search */
   #noResults {
     text-align: center;
     font-style: italic;
@@ -107,6 +110,7 @@
     color: var(--text-light);
   }
   
+/* Message styling for when no results match search */
   #noResults.visible {
     display: block;
   }
@@ -129,6 +133,7 @@
   /*------------------*
     DOOR CARD STYLES
    *------------------*/
+/* Container for each individual product spec */
   .door-spec {
     background-color: var(--card-bg);
     padding: 1rem;
@@ -138,6 +143,7 @@
     transition: background-color 0.3s;
   }
   
+/* Toggle button styling for opening/closing product details */
   .door-toggle {
     background: none;
     border: none;
@@ -153,14 +159,17 @@
     padding: 0;
   }
   
+/* Toggle button styling for opening/closing product details */
   .door-toggle .arrow {
     transition: transform 0.3s ease;
   }
   
+/* Toggle button styling for opening/closing product details */
   .door-toggle.open .arrow {
     transform: rotate(90deg);
   }
   
+/* Styling for the detail/specification section */
   .specs {
     overflow: hidden;
     max-height: 0;
@@ -168,6 +177,7 @@
     transition: all 0.3s ease;
   }
   
+/* Styling for the detail/specification section */
   .specs.open {
     max-height: 1000px;
     opacity: 1;
@@ -175,6 +185,7 @@
   }
   
   /* Split spec list into 2 columns for better readability */
+/* Styling for the detail/specification section */
   .specs ul {
     column-count: 2;
     column-gap: 2rem;
@@ -182,8 +193,16 @@
   }
   
   @media (max-width: 600px) {
+/* Styling for the detail/specification section */
     .specs ul {
       column-count: 1;
     }
+  }
+  
+  header h1 {
+    font-size: 2rem;
+    margin: 1rem 0 0.5rem;
+    text-align: center;
+    color: var(--text-color);
   }
   

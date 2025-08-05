@@ -1,5 +1,7 @@
+<!-- Main HTML structure for controllers.html -->
 <!DOCTYPE html>
 <html lang="en">
+<!-- Page metadata and resource linking -->
 <head>
   <meta charset="UTF-8" />
   <!-- Essential Meta Tags -->
@@ -25,33 +27,44 @@
 
   <!-- Reuse the same stylesheet as the roller doors page -->
   <link rel="stylesheet" href="styles.css" />
-  <link rel="icon" href="favicon.ico" type="images/favicon">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
 </head>
+<!-- Visible content starts here -->
 <body>
+    <header>
+        <h1>Door Controller Specifications</h1>
   <!-- Toggle between dark and light themes -->
+<!-- Dark mode toggle button -->
   <button id="themeToggle" aria-label="Toggle Dark Mode">🌙</button>
 
   <!-- Page navigation between product categories -->
-  <nav>
-    <a href="index.html">Roller Doors</a> |
-    <a href="controllers.html">Controllers</a>
-  </nav>
+<!-- Navigation between product categories -->
+    <nav>
+      <a href="index.html">Roller Doors</a> |
+      <a href="controllers.html" class="active">Controllers</a>
+    </nav>
+  </header>
 
   <!-- Search interface and reset button -->
   <div class="search-container">
+<!-- Input field for filtering by model -->
     <input type="text" id="searchInput" placeholder="Search by model..." />
+<!-- Button to reset search field -->
     <button id="clearSearch">Clear</button>
   </div>
 
   <!-- Displayed when no matching search results are found -->
+<!-- Display when no search matches found -->
   <div id="noResults"></div>
 
   <!-- Container for dynamically loaded controller specifications -->
+<!-- Dynamic list of product specs will be inserted here -->
   <div id="doorList"></div>
   <div id="loadingMessage">Loading data...</div>
 
 
   <!-- Load PapaParse CSV parser and controller data script -->
+<!-- Load external CSV parser -->
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <script src="controllers.js"></script>
 </body>
