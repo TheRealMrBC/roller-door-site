@@ -42,6 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let doorsData = [];
   
     // Fetch and parse CSV data from Google Sheets
+    const loading = document.getElementById("loadingMessage");
 // Parse data from external CSV (Google Sheets) using PapaParse
     Papa.parse(sheetUrl, {
       download: true,
