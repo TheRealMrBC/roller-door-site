@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const noResults = document.getElementById("noResults");
     let doorsData = [];
   
-    // Fetch and parse CSV data from Google Sheets
+    // Use PapaParse to load CSV data from Google Sheets
     const loading = document.getElementById("loadingMessage");
 // Parse data from external CSV (Google Sheets) using PapaParse
     Papa.parse(sheetUrl, {
@@ -56,11 +56,10 @@ document.addEventListener("DOMContentLoaded", () => {
           }
           return normalized;
         });
-        loading.textContent = "Failed to load data.";
-        console.log("Normalized data:", doorsData);
         displayDoors(doorsData);
       },
       error: function (err) {
+        loading.textContent = "Failed to load data.";
         console.error("Error loading sheet:", err);
         doorList.innerHTML = "<p>Error loading door data.</p>";
       }
