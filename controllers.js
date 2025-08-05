@@ -48,6 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
       download: true,
       header: true,
       complete: function (results) {
+        loading.style.display = "none";
         doorsData = results.data.map(door => {
           const normalized = {};
           for (const key in door) {
@@ -55,6 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
           }
           return normalized;
         });
+        loading.textContent = "Failed to load data.";
         console.log("Normalized data:", doorsData);
         displayDoors(doorsData);
       },
