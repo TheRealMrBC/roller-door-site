@@ -1,208 +1,624 @@
-/* styles.css */
+/* styles.css
+ *
+ * All colours are CSS variables. Change the brand by editing the
+ * --accent values in the light and dark blocks below.
+ */
 
 /*------------------*
-  THEME: LIGHT MODE
+  THEME TOKENS
  *------------------*/
- :root {
-    --background: #ffffff;
-    --text: #1a1a1a;
-    --card-bg: #f3f3f3;
-    --primary: #006699;
-    --primary-dark: #004466;
-    --text-light: #e0e0e0;
-    --link-color: #006699;
-    --link-hover: #004466;
-  }
-  
-  /*------------------*
-    THEME: DARK MODE
-   *------------------*/
-/* Dark mode overrides for body and text */
-  .dark {
-    --background: #121212;
-    --text: #f3f3f3;
-    --card-bg: #1e1e1e;
-    --primary: #66ccff;
-    --primary-dark: #3399cc;
-    --text-light: #999999;
-    --link-color: #66ccff;
-    --link-hover: #99e6ff;
-  }
-  
-  /*------------------*
-    GLOBAL STYLES
-   *------------------*/
-/* Base styles for body including font, background, and transition */
-  body {
-    font-family: Arial, sans-serif;
-    background-color: var(--background);
-    color: var(--text);
-    margin: 0;
-    padding: 1rem;
-    transition: background-color 0.3s, color 0.3s;
-  }
-  
-  nav {
-    text-align: center;
-    margin-bottom: 2rem;
-  }
-  
-  nav a {
-    color: var(--link-color);
-    margin: 0 1rem;
-    text-decoration: none;
-    font-weight: bold;
-  }
-  
-  nav a:hover {
-    color: var(--link-hover);
-    text-decoration: underline;
-  }
+:root {
+  --bg: #f5f7fa;
+  --surface: #ffffff;
+  --surface-2: #eef2f6;
+  --border: #dbe2ea;
+  --text: #17202a;
+  --text-muted: #5b6875;
+  --accent: #006699;
+  --accent-hover: #004f77;
+  --accent-soft: #e2f0f7;
+  --on-accent: #ffffff;
+  --mark-bg: #ffe58a;
+  --mark-text: #17202a;
+  --danger: #b42318;
+  --shadow: 0 1px 2px rgba(16, 24, 40, 0.06), 0 1px 3px rgba(16, 24, 40, 0.08);
+  --shadow-open: 0 4px 16px rgba(16, 24, 40, 0.10);
+  --radius: 12px;
+  --focus: 0 0 0 3px rgba(0, 102, 153, 0.35);
+  color-scheme: light;
+}
 
-  nav a.active {
-    text-decoration: underline;
-    pointer-events: none;
-  }
-  
-  
-  /*------------------*
-    SEARCH BAR
-   *------------------*/
-  .search-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 1.5rem;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-  
-  #searchInput {
-    padding: 0.5rem;
-    font-size: 1rem;
-    width: 250px;
-    max-width: 100%;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-  }
-  
-  #clearSearch {
-    background-color: var(--primary);
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-  }
-  
-  #clearSearch:hover {
-    background-color: var(--primary-dark);
-  }
-  
-/* Message styling for when no results match search */
-  #noResults {
-    text-align: center;
-    font-style: italic;
-    margin-top: 1rem;
+:root[data-theme="dark"] {
+  --bg: #0f1419;
+  --surface: #182028;
+  --surface-2: #202a34;
+  --border: #2c3845;
+  --text: #e8edf2;
+  --text-muted: #9aa8b6;
+  --accent: #5cc4f5;
+  --accent-hover: #8dd6f8;
+  --accent-soft: #15364a;
+  --on-accent: #0b1a24;
+  --mark-bg: #7a6514;
+  --mark-text: #fff7d6;
+  --danger: #ff8a80;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-open: 0 6px 20px rgba(0, 0, 0, 0.45);
+  --focus: 0 0 0 3px rgba(92, 196, 245, 0.45);
+  color-scheme: dark;
+}
+
+/*------------------*
+  BASE
+ *------------------*/
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  background: var(--bg);
+  color: var(--text);
+  transition: background-color 0.2s, color 0.2s;
+}
+
+a {
+  color: var(--accent);
+}
+
+a:hover {
+  color: var(--accent-hover);
+}
+
+:focus-visible {
+  outline: none;
+  box-shadow: var(--focus);
+  border-radius: 6px;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -3rem;
+  z-index: 100;
+  padding: 0.5rem 1rem;
+  background: var(--accent);
+  color: var(--on-accent);
+  border-radius: 8px;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  top: 0.75rem;
+}
+
+.container {
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 16px;
+  flex: 1;
+}
+
+/*------------------*
+  HEADER & NAV
+ *------------------*/
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  backdrop-filter: saturate(160%) blur(10px);
+  -webkit-backdrop-filter: saturate(160%) blur(10px);
+  border-bottom: 1px solid var(--border);
+}
+
+.header-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0.6rem 16px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text);
+  text-decoration: none;
+  font-size: 1.05rem;
+  white-space: nowrap;
+}
+
+.brand:hover {
+  color: var(--text);
+}
+
+.brand strong {
+  color: var(--accent);
+}
+
+.brand-mark {
+  display: inline-grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 8px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 1.1rem;
+}
+
+nav {
+  display: flex;
+  gap: 0.25rem;
+  margin-left: auto;
+}
+
+nav a {
+  padding: 0.45rem 0.8rem;
+  border-radius: 999px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  white-space: nowrap;
+}
+
+nav a:hover {
+  color: var(--text);
+  background: var(--surface-2);
+}
+
+nav a.active {
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.icon-btn {
+  flex: none;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: inline-grid;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.icon-btn:hover {
+  background: var(--surface-2);
+}
+
+@media (max-width: 560px) {
+  .brand > span:last-child {
     display: none;
-    color: var(--text-light);
   }
-  
-/* Message styling for when no results match search */
-  #noResults.visible {
-    display: block;
+  nav {
+    margin-left: 0;
+    flex: 1;
+    justify-content: center;
   }
-  
-  /*------------------*
-    DARK MODE TOGGLE
-   *------------------*/
-  #themeToggle {
-    position: fixed;
-    top: 1rem;
-    right: 1rem;
-    background: transparent;
-    border: none;
-    font-size: 1.5rem;
-    cursor: pointer;
-    color: var(--text);
-    transition: color 0.3s;
+  nav a {
+    padding: 0.45rem 0.65rem;
   }
-  
-  /*------------------*
-    DOOR CARD STYLES
-   *------------------*/
-/* Container for each individual product spec */
-  .door-spec {
-    background-color: var(--card-bg);
-    padding: 1rem;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    margin-bottom: 1.5rem;
-    transition: background-color 0.3s;
+}
+
+/*------------------*
+  PAGE INTRO
+ *------------------*/
+.page-intro {
+  padding: 2rem 0 1.25rem;
+}
+
+.page-intro h1 {
+  margin: 0 0 0.35rem;
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.page-intro p {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+/*------------------*
+  TOOLBAR & SEARCH
+ *------------------*/
+.toolbar {
+  margin-bottom: 1rem;
+}
+
+.search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 0.9rem;
+  color: var(--text-muted);
+  font-size: 1.3rem;
+  pointer-events: none;
+}
+
+#searchInput {
+  width: 100%;
+  padding: 0.8rem 3rem 0.8rem 2.6rem;
+  font: inherit;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+#searchInput::placeholder {
+  color: var(--text-muted);
+}
+
+#searchInput:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: var(--focus);
+}
+
+#searchInput::-webkit-search-cancel-button {
+  display: none;
+}
+
+.search-hint,
+.clear-btn {
+  position: absolute;
+  right: 0.6rem;
+}
+
+.search-hint {
+  padding: 0.05rem 0.45rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font: 0.8rem/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  color: var(--text-muted);
+  background: var(--surface-2);
+  pointer-events: none;
+}
+
+#searchInput:focus ~ .search-hint,
+.clear-btn:not([hidden]) ~ .search-hint,
+#searchInput:not(:placeholder-shown) ~ .search-hint {
+  display: none;
+}
+
+@media (hover: none) {
+  .search-hint {
+    display: none;
   }
-  
-/* Toggle button styling for opening/closing product details */
-  .door-toggle {
-    background: none;
-    border: none;
-    width: 100%;
-    text-align: left;
-    font-size: 1.2rem;
-    font-weight: bold;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: var(--primary);
-    padding: 0;
-  }
-  
-/* Toggle button styling for opening/closing product details */
-  .door-toggle .arrow {
-    transition: transform 0.3s ease;
-  }
-  
-/* Toggle button styling for opening/closing product details */
-  .door-toggle.open .arrow {
-    transform: rotate(90deg);
-  }
-  
-/* Styling for the detail/specification section */
-  .specs {
-    overflow: hidden;
-    max-height: 0;
+}
+
+.clear-btn {
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.clear-btn:hover {
+  color: var(--text);
+}
+
+.clear-btn[hidden] {
+  display: none;
+}
+
+.toolbar-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.result-count {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.toolbar-actions {
+  display: flex;
+  gap: 0.25rem;
+}
+
+/*------------------*
+  BUTTONS
+ *------------------*/
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.95rem;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: var(--accent);
+  color: var(--on-accent);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.btn:hover {
+  background: var(--accent-hover);
+  color: var(--on-accent);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-muted);
+  padding: 0.35rem 0.7rem;
+}
+
+.btn-ghost:hover {
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+  pointer-events: none;
+}
+
+.btn-link {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 25%, transparent);
+}
+
+.btn-link:hover {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+/*------------------*
+  STATUS MESSAGES
+ *------------------*/
+.status {
+  margin: 1rem 0;
+  padding: 2rem 1rem;
+  text-align: center;
+  color: var(--text-muted);
+  background: var(--surface);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+}
+
+.status[hidden] {
+  display: none;
+}
+
+.status p {
+  margin: 0 0 0.75rem;
+}
+
+.status p:last-child {
+  margin-bottom: 0;
+}
+
+.status.error {
+  color: var(--danger);
+  border-color: color-mix(in srgb, var(--danger) 40%, transparent);
+}
+
+/*------------------*
+  PRODUCT CARDS
+ *------------------*/
+.product-list {
+  display: grid;
+  gap: 0.75rem;
+  padding-bottom: 2rem;
+}
+
+.product {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  scroll-margin-top: 5rem;
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+.product[open] {
+  box-shadow: var(--shadow-open);
+  border-color: color-mix(in srgb, var(--accent) 35%, var(--border));
+}
+
+.product summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  cursor: pointer;
+  list-style: none;
+  border-radius: var(--radius);
+}
+
+.product summary::-webkit-details-marker {
+  display: none;
+}
+
+.product summary:hover .product-name {
+  color: var(--accent);
+}
+
+.product-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.chevron {
+  flex: none;
+  width: 0.6rem;
+  height: 0.6rem;
+  border-right: 2px solid var(--text-muted);
+  border-bottom: 2px solid var(--text-muted);
+  transform: rotate(-45deg);
+  transition: transform 0.2s ease;
+}
+
+.product[open] .chevron {
+  transform: rotate(45deg);
+}
+
+.product-body {
+  padding: 0 1.25rem 1.25rem;
+  border-top: 1px solid var(--border);
+  animation: reveal 0.2s ease;
+}
+
+@keyframes reveal {
+  from {
     opacity: 0;
-    transition: all 0.3s ease;
+    transform: translateY(-4px);
   }
-  
-/* Styling for the detail/specification section */
-  .specs.open {
-    max-height: 1000px;
-    opacity: 1;
-    margin-top: 1rem;
+}
+
+.spec-grid {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 2rem;
+}
+
+.spec-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.65rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.spec-row dt {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+
+.spec-row dd {
+  margin: 0;
+  font-weight: 600;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+.spec-row dd.empty {
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.spec-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+mark {
+  background: var(--mark-bg);
+  color: var(--mark-text);
+  border-radius: 3px;
+  padding: 0 1px;
+}
+
+@media (max-width: 640px) {
+  .spec-grid {
+    grid-template-columns: 1fr;
   }
-  
-  /* Split spec list into 2 columns for better readability */
-/* Styling for the detail/specification section */
-  .specs ul {
-    column-count: 2;
-    column-gap: 2rem;
-    padding-left: 1rem;
+  .product summary {
+    padding: 0.9rem 1rem;
   }
-  
-  @media (max-width: 600px) {
-/* Styling for the detail/specification section */
-    .specs ul {
-      column-count: 1;
-    }
+  .product-body {
+    padding: 0 1rem 1rem;
   }
-  
-  header h1 {
-    font-size: 2rem;
-    margin: 1rem 0 0.5rem;
-    text-align: center;
-    color: var(--text-color);
+}
+
+/*------------------*
+  FOOTER
+ *------------------*/
+.site-footer {
+  border-top: 1px solid var(--border);
+  padding: 1.25rem 16px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.site-footer p {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+/*------------------*
+  MOTION & PRINT
+ *------------------*/
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
   }
-  
+}
+
+@media print {
+  .site-header,
+  .toolbar,
+  .site-footer,
+  .skip-link {
+    display: none;
+  }
+  .product {
+    box-shadow: none;
+    break-inside: avoid;
+  }
+  .product-body {
+    animation: none;
+  }
+}
