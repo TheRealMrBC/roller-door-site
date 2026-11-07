@@ -4,9 +4,11 @@ A responsive, searchable, and dark-mode-compatible website for displaying detail
 
 ## ✨ Features
 
-- 🔍 Real-time search by model name
-- 🌗 Light/Dark mode toggle with saved preference
-- 📄 Expandable spec sections for each product
+- 🔍 Real-time search across model names and every spec value, with match highlighting
+- 🔗 Shareable searches (`?q=...`) and direct links to a model (`#model-name`)
+- ⌨️ Press `/` to jump to search, `Esc` to clear it
+- 🌗 Light/Dark mode that follows your system setting, with saved preference and no flash on load
+- 📄 Expandable spec sections for each product, plus Expand all / Collapse all
 - 📱 Mobile-responsive layout with smooth animations
 - 📤 Data loaded from Google Sheets (CSV)
 - 🧭 Easy navigation between Roller Doors and Controllers
@@ -23,12 +25,11 @@ A responsive, searchable, and dark-mode-compatible website for displaying detail
 
 ```plaintext
 /
-├── index.html               # Main page for roller doors
-├── controllers.html         # Second page for door controllers
-├── script.js                # Logic for loading & displaying roller door data
-├── controllers.js           # Logic for controller data
+├── index.html               # Roller doors page (sheet URL set on <body data-sheet-url>)
+├── controllers.html         # Door controllers page (sheet URL set on <body data-sheet-url>)
+├── app.js                   # Shared logic: loading, search, rendering, theme
 ├── styles.css               # Theme, layout, animations
-├── favicon.ico              # Tab icon
+├── images/favicon.ico       # Tab icon
 ├── README.md                # This file
 ```
 
@@ -37,7 +38,8 @@ A responsive, searchable, and dark-mode-compatible website for displaying detail
 ## 🔌 Data Source
 
 - Data is pulled from **Google Sheets** in CSV format using [PapaParse](https://www.papaparse.com/).
-- To update door or controller info, simply modify the Google Sheet linked in your scripts.
+- To update door or controller info, simply modify the Google Sheet. Each page's sheet URL is the `data-sheet-url` attribute on its `<body>` tag.
+- The sheet needs a `Model` column. Every other column becomes a spec row, in sheet order. Columns containing links show as buttons, and columns with "datasheet" in the name are labelled as downloads.
 
 ---
 

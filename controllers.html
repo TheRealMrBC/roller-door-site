@@ -1,71 +1,88 @@
-<!-- Main HTML structure for controllers.html -->
 <!DOCTYPE html>
 <html lang="en">
-<!-- Page metadata and resource linking -->
 <head>
-  <meta charset="UTF-8" />
-  <!-- Essential Meta Tags -->
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Browse detailed specifications of roller doors and control systems. Compare models, download datasheets, and find the perfect fit.">
-<meta name="keywords" content="roller doors, industrial doors, door specifications, controllers, datasheets">
-<meta name="author" content="Roller Door DataBase">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Controllers | Roller Door Specs</title>
+  <meta name="description" content="Browse and search roller door controller specifications and downloadable datasheets.">
+  <meta name="author" content="Roller Door DataBase">
+  <link rel="canonical" href="https://www.rollerdoordb.co.uk/controllers.html">
+  <meta name="color-scheme" content="light dark">
 
-<!-- Open Graph for Social Sharing -->
-<meta property="og:title" content="Roller Door Specs">
-<meta property="og:description" content="View and compare roller doors and controller models.">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://www.rollerdoordb.co.uk/index.html">
-<meta property="og:image" content="https://www.rollerdoordb.co.uk/images/preview.png">
+  <!-- Open Graph / social sharing -->
+  <meta property="og:site_name" content="Roller Door DataBase">
+  <meta property="og:title" content="Controllers | Roller Door Specs">
+  <meta property="og:description" content="Browse and search roller door controller specifications and downloadable datasheets.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.rollerdoordb.co.uk/controllers.html">
+  <meta name="twitter:card" content="summary">
 
-<!-- Twitter Card -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Roller Door Specs">
-<meta name="twitter:description" content="Compare roller doors and control units. Datasheets and dimensions.">
-<meta name="twitter:image" content="https://www.rollerdoordb.co.uk/images/preview.png">
-<title>Controllers | Roller Door Specs</title>
+  <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="styles.css">
 
-
-  <!-- Reuse the same stylesheet as the roller doors page -->
-  <link rel="stylesheet" href="styles.css" />
-  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <!-- Apply the saved (or system) theme before first paint to avoid a light flash. -->
+  <script>
+    (function () {
+      var t;
+      try { t = localStorage.getItem("theme"); } catch (e) {}
+      if (t !== "light" && t !== "dark") {
+        t = window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      }
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
 </head>
-<!-- Visible content starts here -->
-<body>
-    <header>
-        <h1>Door Controller Specifications</h1>
+<body data-sheet-url="https://docs.google.com/spreadsheets/d/e/2PACX-1vTERjt8-EVQ4R3r4ZjzqSVUeQooVKbNo5YzikgWX_SzrYBt3FmjDxQigeGv6pG6a4qELL-cRGIOCzFf/pub?output=csv" data-item-noun="controller">
+  <a class="skip-link" href="#productList">Skip to controllers</a>
 
-  <!-- Page navigation between product categories -->
-<!-- Navigation between product categories -->
-    <nav>
-      <a href="index.html">Roller Doors</a> |
-      <a href="controllers.html" class="active">Controllers</a>
-    </nav>
-<!-- Toggle between dark and light themes -->
-<!-- Dark mode toggle button -->
-<button id="themeToggle" aria-label="Toggle Dark Mode">🌙</button>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-mark" aria-hidden="true">▤</span>
+        <span>Roller Door <strong>DB</strong></span>
+      </a>
+      <nav aria-label="Product categories">
+        <a href="index.html">Roller Doors</a>
+        <a href="controllers.html" class="active" aria-current="page">Controllers</a>
+      </nav>
+      <button id="themeToggle" class="icon-btn" type="button" aria-label="Toggle dark mode">🌙</button>
+    </div>
   </header>
 
-  <!-- Search interface and reset button -->
-  <div class="search-container">
-<!-- Input field for filtering by model -->
-    <input type="text" id="searchInput" placeholder="Search by model..." />
-<!-- Button to reset search field -->
-    <button id="clearSearch">Clear</button>
-  </div>
+  <main class="container">
+    <div class="page-intro">
+      <h1>Door Controller Specifications</h1>
+      <p>Search by model or any spec value, then open a controller to see its full specification and datasheets.</p>
+    </div>
 
-  <!-- Displayed when no matching search results are found -->
-<!-- Display when no search matches found -->
-  <div id="noResults"></div>
+    <div class="toolbar">
+      <div class="search-box">
+        <label for="searchInput" class="visually-hidden">Search controllers</label>
+        <span class="search-icon" aria-hidden="true">⌕</span>
+        <input type="search" id="searchInput" placeholder="Search models and specs…" autocomplete="off" spellcheck="false">
+        <kbd class="search-hint" aria-hidden="true">/</kbd>
+        <button id="clearSearch" class="clear-btn" type="button" aria-label="Clear search" hidden>✕</button>
+      </div>
+      <div class="toolbar-row">
+        <p id="resultCount" class="result-count" aria-live="polite"></p>
+        <div class="toolbar-actions">
+          <button id="expandAll" class="btn btn-ghost" type="button">Expand all</button>
+          <button id="collapseAll" class="btn btn-ghost" type="button">Collapse all</button>
+        </div>
+      </div>
+    </div>
 
-  <!-- Container for dynamically loaded controller specifications -->
-<!-- Dynamic list of product specs will be inserted here -->
-  <div id="doorList"></div>
-  <div id="loadingMessage">Loading data...</div>
+    <div id="status" class="status" role="status"><p>Loading specifications…</p></div>
+    <noscript><p class="status">This site needs JavaScript to load the product specifications.</p></noscript>
 
+    <div id="productList" class="product-list"></div>
+  </main>
 
-  <!-- Load PapaParse CSV parser and controller data script -->
-<!-- Load external CSV parser -->
+  <footer class="site-footer">
+    <p>Specifications are provided for reference. Always check the manufacturer’s datasheet before ordering or installing.</p>
+  </footer>
+
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-  <script src="controllers.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
