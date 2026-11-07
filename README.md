@@ -29,6 +29,7 @@ A responsive, searchable, and dark-mode-compatible website for displaying detail
 ├── controllers.html         # Door controllers page (sheet URL set on <body data-sheet-url>)
 ├── app.js                   # Shared logic: loading, search, rendering, theme
 ├── styles.css               # Theme, layout, animations
+├── datasheets/              # PDFs hosted on this site (see datasheets/README.md)
 ├── images/favicon.ico       # Tab icon
 ├── README.md                # This file
 ```
@@ -40,6 +41,10 @@ A responsive, searchable, and dark-mode-compatible website for displaying detail
 - Data is pulled from **Google Sheets** in CSV format using [PapaParse](https://www.papaparse.com/).
 - To update door or controller info, simply modify the Google Sheet. Each page's sheet URL is the `data-sheet-url` attribute on its `<body>` tag.
 - The sheet needs a `Model` column. Every other column becomes a spec row, in sheet order. Columns containing links show as buttons, and columns with "datasheet" in the name are labelled as downloads.
+
+### 📎 Hosting datasheets on this site
+
+Manufacturer links break when they reorganise their websites (404 errors). To stop that, upload the PDF to the `datasheets/` folder and put its path in the sheet instead of the manufacturer's link, e.g. `datasheets/excel-77-technical.pdf`. Both kinds of link work side by side, so you can move models over one at a time. See [`datasheets/README.md`](datasheets/README.md) for step-by-step instructions.
 
 ---
 

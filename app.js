@@ -5,7 +5,8 @@
 // and a noun for counts on <body data-item-noun="door">.
 //
 // The sheet must have a "Model" column. Every other column is shown as a
-// spec row, in sheet order. Columns whose values are URLs are shown as
+// spec row, in sheet order. Columns whose values are URLs (or paths like
+// "datasheets/file.pdf" for files stored on this site) are shown as
 // link buttons; columns with "datasheet" in the header are labelled as
 // downloads.
 
@@ -52,7 +53,11 @@
 
   /* ---------- Helpers ---------- */
 
-  const isUrl = (v) => /^https?:\/\//i.test(v);
+  // A cell is a link if it's a full web address, or a path to a file kept on
+  // this site in the datasheets/ folder (e.g. "datasheets/excel-77.pdf").
+  const LOCAL_FILE = /^(?:\.?\/)?datasheets\/[^<>"]+$/i;
+  const isUrl = (v) => /^https?:\/\//i.test(v) || LOCAL_FILE.test(v);
+  const toHref = (v) => (/^https?:/i.test(v) ? v : encodeURI(v.replace(/^\.?\//, "")));
 
   function prettyLabel(header) {
     const text = header.trim().replace(/[-_]+/g, " ").replace(/\s+/g, " ");
@@ -189,10 +194,10 @@
       if (isUrl(field.value)) {
         const a = document.createElement("a");
         a.className = "btn btn-link";
-        a.href = field.value;
+        a.href = toHref(field.value);
         a.target = "_blank";
         a.rel = "noopener noreferrer";
-        a.textContent = field.key.includes("datasheet") ? `⬇ ${field.label}` : `${field.label} ↗`;
+        a.textContent = field.key.includes("datasheet") || /\.pdf(\?|#|$)/i.test(field.value) ? `⬇ ${field.label}` : `${field.label} ↗`;
         links.append(a);
         continue;
       }
