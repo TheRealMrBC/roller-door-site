@@ -1,0 +1,59 @@
+# Downloads every PDF linked from the Google Sheets into datasheets/,
+# using the Internet Archive's copy when the manufacturer's link is broken,
+# then opens a pull request with the files and a report of what to change
+# in the sheet.
+#
+# Run it from GitHub: Actions tab -> "Fetch datasheets" -> Run workflow.
+
+name: Fetch datasheets
+
+on:
+  workflow_dispatch:
+    inputs:
+      only_broken:
+        description: "Only save PDFs whose manufacturer link is broken (leave working links alone)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: fetch-datasheets
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download datasheets
+        run: |
+          python3 .github/scripts/fetch_datasheets.py \
+            --report "$RUNNER_TEMP/report.md" \
+            ${{ inputs.only_broken && '--only-broken' || '' }}
+
+      - name: Show report on the run page
+        if: always()
+        run: |
+          if [ -f "$RUNNER_TEMP/report.md" ]; then
+            cat "$RUNNER_TEMP/report.md" >> "$GITHUB_STEP_SUMMARY"
+            # Pull request descriptions are limited to 65,536 characters.
+            head -c 60000 "$RUNNER_TEMP/report.md" > "$RUNNER_TEMP/pr-body.md"
+            if [ "$(wc -c < "$RUNNER_TEMP/report.md")" -gt 60000 ]; then
+              printf '\n\n_Report cut short. The full report is on the workflow run page._\n' >> "$RUNNER_TEMP/pr-body.md"
+            fi
+          fi
+
+      - name: Open pull request with the PDFs
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: datasheets/auto-fetch
+          delete-branch: true
+          add-paths: datasheets/*.pdf
+          commit-message: Add datasheets fetched from manufacturer sites and the Internet Archive
+          title: "Add downloaded datasheets"
+          body-path: ${{ runner.temp }}/pr-body.md
