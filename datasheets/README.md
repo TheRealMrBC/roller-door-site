@@ -3,7 +3,14 @@
 PDFs in this folder are served by the website, so their links never break
 when a manufacturer changes their own site.
 
-## Adding a datasheet
+## Fetching them automatically
+
+The **Fetch datasheets** job (Actions tab → Fetch datasheets → Run workflow)
+downloads every PDF linked from the sheets into this folder, using the
+Internet Archive's copy when a manufacturer link is broken. See the main
+README for details.
+
+## Adding a datasheet by hand
 
 1. On GitHub, open this `datasheets` folder and choose **Add file → Upload files**.
 2. Drag in the PDF and click **Commit changes**.
