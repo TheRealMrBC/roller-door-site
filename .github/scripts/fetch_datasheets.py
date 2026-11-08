@@ -3,9 +3,11 @@
 
 For each web link in the sheets:
   1. Try the original link. If it returns a real PDF, save it.
-  2. Otherwise look for the newest copy in the Internet Archive's
+  2. Otherwise look on the model's product page (any working non-PDF link
+     in the same row) for a PDF with a matching filename, and save that.
+  3. Otherwise look for the newest copy in the Internet Archive's
      Wayback Machine and save that instead.
-  3. Otherwise record it as "not found" so a person can search for it.
+  4. Otherwise record it as "not found" so a person can search for it.
 
 Files that already exist in datasheets/ are left alone, so the job can be
 re-run safely. Links that aren't PDFs (e.g. a product web page) are skipped.
@@ -33,6 +35,7 @@ PAGES = {"Roller Doors": "index.html", "Controllers": "controllers.html"}
 # Overridable for testing.
 WAYBACK_CDX = os.environ.get("WAYBACK_CDX", "https://web.archive.org/cdx/search/cdx")
 WAYBACK_RAW = os.environ.get("WAYBACK_RAW", "https://web.archive.org/web/{ts}id_/{url}")
+WAYBACK_AVAILABLE = os.environ.get("WAYBACK_AVAILABLE", "https://archive.org/wayback/available")
 
 USER_AGENT = (
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
@@ -46,11 +49,11 @@ def log(msg):
     print(msg, flush=True)
 
 
-def http_get(url, max_bytes=MAX_BYTES):
+def http_get(url, max_bytes=MAX_BYTES, timeout=TIMEOUT):
     """Return (status, content_type, body). Body is None if too large."""
     req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, "Accept": "*/*"})
     try:
-        with urllib.request.urlopen(req, timeout=TIMEOUT) as resp:
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
             body = resp.read(max_bytes + 1)
             if len(body) > max_bytes:
                 return resp.status, resp.headers.get("Content-Type", ""), None
@@ -91,35 +94,111 @@ def load_sheet(url):
     return list(csv.DictReader(io.StringIO(text)))
 
 
+def _wayback_fetch(ts, url):
+    time.sleep(1.5)
+    status, _, pdf = http_get(WAYBACK_RAW.format(ts=ts, url=url), timeout=90)
+    return pdf if status == 200 and is_pdf(pdf) else None
+
+
 def wayback_latest_pdf(url):
-    """Return (timestamp, body) of the newest archived PDF copy, or (None, None)."""
+    """Find the newest archived PDF copy of `url`.
+
+    Returns (timestamp, body, note). note is "" on success, "no archive copy"
+    if the archive has none, or "archive didn't respond" if it couldn't be asked.
+    """
+    responded = False
+
+    # 1. CDX search: lists every capture, so we can try several, newest first.
     query = urllib.parse.urlencode(
-        {
-            "url": url,
-            "output": "json",
-            "filter": "statuscode:200",
-            "fl": "timestamp,mimetype",
-            "limit": "-8",  # newest 8 captures
-        }
+        {"url": url, "output": "json", "filter": "statuscode:200", "fl": "timestamp", "limit": "-8"}
     )
     for attempt in range(3):
-        status, _, body = http_get(f"{WAYBACK_CDX}?{query}", max_bytes=2 * 1024 * 1024)
+        status, err, body = http_get(f"{WAYBACK_CDX}?{query}", max_bytes=2 * 1024 * 1024, timeout=90)
         if status == 200:
+            responded = True
+            try:
+                rows = json.loads(body or b"[]")
+            except ValueError:
+                rows = []
+            captures = [r[0] for r in rows[1:]]  # first row is the header
+            log(f"    archive search: {len(captures)} capture(s)")
+            for ts in reversed(captures):
+                pdf = _wayback_fetch(ts, url)
+                if pdf:
+                    return ts, pdf, ""
             break
-        time.sleep(5 * (attempt + 1))
-    else:
-        return None, None
-    try:
-        rows = json.loads(body or b"[]")
-    except ValueError:
-        return None, None
-    captures = [r[0] for r in rows[1:]]  # first row is the header
-    for ts in reversed(captures):  # newest first
-        time.sleep(1.5)
-        status, _, pdf = http_get(WAYBACK_RAW.format(ts=ts, url=url))
-        if status == 200 and is_pdf(pdf):
-            return ts, pdf
-    return None, None
+        log(f"    archive search failed ({status or err}); retry {attempt + 1}/3")
+        time.sleep(10 * (attempt + 1))
+
+    # 2. Availability API: a different service, often up when the search isn't.
+    for attempt in range(2):
+        status, err, body = http_get(
+            f"{WAYBACK_AVAILABLE}?" + urllib.parse.urlencode({"url": url}), timeout=60
+        )
+        if status == 200:
+            responded = True
+            try:
+                closest = json.loads(body or b"{}").get("archived_snapshots", {}).get("closest") or {}
+            except ValueError:
+                closest = {}
+            ts = closest.get("timestamp")
+            log(f"    archive lookup: {'capture ' + ts if ts else 'no capture'}")
+            if ts and closest.get("available"):
+                pdf = _wayback_fetch(ts, url)
+                if pdf:
+                    return ts, pdf, ""
+            break
+        log(f"    archive lookup failed ({status or err})")
+        time.sleep(10)
+
+    return None, None, ("no archive copy" if responded else "archive didn't respond")
+
+
+def page_pdf_links(page_url, cache={}):
+    """Return the PDF links found in a web page's HTML (cached per page)."""
+    if page_url in cache:
+        return cache[page_url]
+    time.sleep(1)
+    status, _, body = http_get(page_url, max_bytes=10 * 1024 * 1024)
+    links = []
+    if status == 200 and body and not is_pdf(body):
+        html = body.decode("utf-8", errors="replace").replace("\\/", "/").replace("&amp;", "&")
+        pattern = r"""(?:https?:)?[^"'()\s<>]*?\.pdf(?:\?[^"'()\s<>]*)?"""
+        for m in re.finditer(pattern, html, re.I):
+            raw = m.group(0).lstrip("=:")
+            if not raw or raw.startswith(("data:", "javascript:")):
+                continue
+            full = urllib.parse.urljoin(page_url, raw)
+            if re.match(r"^https?://", full) and full not in links:
+                links.append(full)
+    log(f"  product page {page_url} -> HTTP {status}, {len(links)} PDF link(s)")
+    for link in links:
+        log(f"      found: {link}")
+    cache[page_url] = links
+    return links
+
+
+def _tokens(text):
+    name = urllib.parse.unquote(urllib.parse.urlparse(text).path.rsplit("/", 1)[-1])
+    name = re.sub(r"\.pdf$", "", name, flags=re.I)
+    return {t for t in re.split(r"[^a-z0-9]+", name.lower()) if t}
+
+
+def best_match(old_link, column, candidates):
+    """Pick the candidate PDF whose filename best matches the broken link's."""
+    old = _tokens(old_link)
+    col = set(re.split(r"[^a-z0-9]+", column.lower())) - {"", "datasheet"}
+    best, best_score = None, 0.0
+    for cand in candidates:
+        c = _tokens(cand)
+        if not c or not old:
+            continue
+        score = len(old & c) / len(old | c)
+        if col & c:  # e.g. "technical" column -> file with "technical" in its name
+            score += 0.15
+        if score > best_score:
+            best, best_score = cand, score
+    return best if best_score >= 0.4 else None
 
 
 def fmt_ts(ts):
@@ -159,6 +238,14 @@ def main():
             model = (row.get(model_col) or "").strip()
             if not model:
                 continue
+            # Working product-page links in this row (e.g. a "Web-Site" column).
+            pages = [
+                (v or "").strip()
+                for c, v in row.items()
+                if c and c != model_col
+                and re.match(r"^https?://", (v or "").strip(), re.I)
+                and not expects_pdf(c, (v or "").strip())
+            ]
             for col, value in row.items():
                 if col is None or col == model_col:
                     continue
@@ -202,15 +289,34 @@ def main():
                     if os.path.exists(path):
                         outcome, new_value = f"✅ Already in datasheets/ (original link: {reason})", rel
                     else:
-                        log(f"    original failed ({reason}); checking Wayback Machine")
-                        ts, pdf = wayback_latest_pdf(link)
-                        if pdf:
-                            with open(path, "wb") as f:
-                                f.write(pdf)
-                            outcome = f"🗄️ Saved archive copy from {fmt_ts(ts)} (original link: {reason})"
-                            new_value = rel
-                        else:
-                            outcome, new_value = f"❌ Not found (original link: {reason}, no archive copy)", ""
+                        log(f"    original failed ({reason})")
+                        outcome = None
+                        # 1. Look for the moved PDF on the model's product page.
+                        for page_url in pages:
+                            match = best_match(link, col, page_pdf_links(page_url))
+                            if not match:
+                                continue
+                            log(f"    best match on product page: {match}")
+                            time.sleep(1)
+                            m_status, _, m_body = http_get(match)
+                            if m_status == 200 and is_pdf(m_body):
+                                with open(path, "wb") as f:
+                                    f.write(m_body)
+                                outcome = f"🔎 Saved from the product page (new location: {match})"
+                                new_value = rel
+                                break
+                            log(f"    match didn't download (HTTP {m_status})")
+                        # 2. Otherwise use the Internet Archive's copy.
+                        if outcome is None:
+                            log("    checking Wayback Machine")
+                            ts, pdf, note = wayback_latest_pdf(link)
+                            if pdf:
+                                with open(path, "wb") as f:
+                                    f.write(pdf)
+                                outcome = f"🗄️ Saved archive copy from {fmt_ts(ts)} (original link: {reason})"
+                                new_value = rel
+                            else:
+                                outcome, new_value = f"❌ Not found (original link: {reason}, {note})", ""
                 log(f"    -> {outcome}")
                 saved_by_url[link] = (outcome, new_value)
                 results.append((sheet_name, model, col.strip(), link, outcome, new_value))
@@ -225,12 +331,14 @@ def write_report(path, results, only_broken):
     saved = [r for r in results if r[5]]
     missing = [r for r in results if r[4].startswith("❌") or r[4].startswith("⚠️")]
     archived = [r for r in results if r[4].startswith("🗄️")]
+    relocated = [r for r in results if r[4].startswith("🔎")]
 
     out = []
     out.append("## Datasheet download report\n")
     out.append(
         f"- **{len(saved)}** links now have a PDF in `datasheets/`"
-        f" ({len(archived)} of them from the Internet Archive)\n"
+        f" ({len(relocated)} found at a new address on the product page,"
+        f" {len(archived)} from the Internet Archive)\n"
         f"- **{len(missing)}** couldn't be found and need searching for by hand\n"
     )
     if only_broken:
